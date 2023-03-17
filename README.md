@@ -1,6 +1,6 @@
 # Bakalauro-darbas 2023
-```
 ## Planas:
+```
 Plan                         02-28 ✔
 Literature research          03-21 ✔
 Data exploration             04-25 ✔
