@@ -458,7 +458,6 @@ portRetData <- portfolioData(data = RTRN, spec = portfolioSpec())
 # First portfolio #
 
 portf1 <- portfolio.spec(names)
-#portf1 <- add.constraint(portf1, type="full_investment")
 portf1 <- add.constraint(portf1, type="weight_sum", 
                            min_sum=0.99, max_sum=1.01)
 portf1 <- add.constraint(portf1, type="box", min=0, max=0.5)
@@ -475,6 +474,9 @@ print(port.ret1) # returns are negative
 chart.Weights(opt1)
 
 charts.PerformanceSummary(port.ret1)
+chart.CumReturns(port.ret1)
+
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component")
 
 # Second portfolio #
 portf2 <- portfolio.spec(names)
@@ -496,8 +498,11 @@ print(port.ret2) # returns are positive but very small
 chart.Weights(opt2)
 
 charts.PerformanceSummary(port.ret2)
+chart.CumReturns(port.ret2)
 
-# Third portfolio - not used later#
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt2$weights)
+
+# Third portfolio 
 
 portf3 <- portfolio.spec(names)
 portf3 <- add.constraint(portf3, type="weight_sum", 
@@ -519,13 +524,7 @@ print(port.ret3) # returns are positive but very small
 chart.Weights(opt3)
 
 charts.PerformanceSummary(port.ret3)
+chart.CumReturns(port.ret3)
 
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt3$weights)
 
-opt.dn.reb <- optimize.portfolio.rebalancing(RTRN, portfolio = portf.dn,
-                                             optimize_method = "DEoptim",
-                                             search_size = 50, trace = FALSE,
-                                             rebalance_on = "years",
-                                             rp = rp)
-chart.Weights(opt.dn.reb, main="CRRA Weights", col=bluemono)
-chart.RiskReward(opt.dn, risk.col = "StdDev")
-charts.PerformanceSummary(port.returns)
