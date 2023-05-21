@@ -470,13 +470,13 @@ opt1 <- optimize.portfolio(RTRN, portfolio=portf1,
 print(opt1)
 
 port.ret1 <- Return.portfolio(RTRN, opt1$weights)
-print(port.ret1) # returns are negative
+print(port.ret1)
 chart.Weights(opt1)
 
 charts.PerformanceSummary(port.ret1)
-chart.CumReturns(port.ret1)
+chart.CumReturns(port.ret1, main="Grąža, strategija 1, port. 1")
 
-VaR(RTRN, p=0.95, method="modified", portfolio_method="component")
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt1$weights)
 
 # Second portfolio #
 portf2 <- portfolio.spec(names)
@@ -494,11 +494,11 @@ opt2 <- optimize.portfolio(RTRN, portfolio=portf2,
 print(opt2)
 
 port.ret2 <- Return.portfolio(RTRN, opt2$weights)
-print(port.ret2) # returns are positive but very small
+print(port.ret2)
 chart.Weights(opt2)
 
 charts.PerformanceSummary(port.ret2)
-chart.CumReturns(port.ret2)
+chart.CumReturns(port.ret2, main="Grąža, strategija 1, port. 2")
 
 VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt2$weights)
 
@@ -520,7 +520,7 @@ opt3 <- optimize.portfolio(RTRN, portfolio=portf3,
 print(opt3)
 
 port.ret3 <- Return.portfolio(RTRN, opt3$weights)
-print(port.ret3) # returns are positive but very small
+print(port.ret3)
 chart.Weights(opt3)
 
 charts.PerformanceSummary(port.ret3)
