@@ -1155,7 +1155,6 @@ portRetData <- portfolioData(data = RTRN, spec = portfolioSpec())
 names <- c("BTC", "ETH", "BNB", "XRP", "ADA", "DOGE", "LTC", "TRX", "LINK", "BCH", "EOS", "OMG", "XMR", "ZEC")
 
 portf1 <- portfolio.spec(names)
-#portf1 <- add.constraint(portf1, type="full_investment")
 portf1 <- add.constraint(portf1, type="weight_sum", 
                          min_sum=0.99, max_sum=1.01)
 portf1 <- add.constraint(portf1, type="box", min=0, max=0.5)
@@ -1167,12 +1166,15 @@ opt1 <- optimize.portfolio(RTRN, portfolio=portf1,
                            trace=TRUE)
 print(opt1)
 
-w1 <- c(rep(0.07142857, 14))
 port.ret1 <- Return.portfolio(RTRN, opt1$weights)
-print(port.ret1) # returns are sometimes negative
+print(port.ret1)
 chart.Weights(opt1)
 
 charts.PerformanceSummary(port.ret1)
+chart.CumReturns(port.ret1, main="Grąža, strategija 2, port. 1")
+
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt1$weights)
+
 
 # Second portfolio #
 portf2 <- portfolio.spec(names)
@@ -1190,10 +1192,13 @@ opt2 <- optimize.portfolio(RTRN, portfolio=portf2,
 print(opt2)
 
 port.ret2 <- Return.portfolio(RTRN, opt2$weights)
-print(port.ret2) # returns are positive but very small
+print(port.ret2)
 chart.Weights(opt2)
 
 charts.PerformanceSummary(port.ret2)
+chart.CumReturns(port.ret2, main="Grąža, strategija 2, port. 2")
+
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt2$weights)
 
 # Third portfolio - not used later#
 
@@ -1213,26 +1218,10 @@ opt3 <- optimize.portfolio(RTRN, portfolio=portf3,
 print(opt3)
 
 port.ret3 <- Return.portfolio(RTRN, opt3$weights)
-print(port.ret3) # returns are positive but very small
+print(port.ret3) 
 chart.Weights(opt3)
-# up to 15% returns
+
 charts.PerformanceSummary(port.ret3)
+chart.CumReturns(port.ret3, main="Grąža, strategija 2, port. 3")
 
-port.ret4 <- Return.portfolio(RTRN, opt3$weights, wealth.index = TRUE)
-port.ret4
-
-port.ret5 <- Return.portfolio(RTRN, opt3$weights, verbose = TRUE)
-port.ret5
-
-chart.CumReturns(port.ret5$returns)
-chart.StackedBar(port.ret5$BOP.Weight)
-chart.StackedBar(port.ret5$BOP.Value)
-
-opt.dn.reb <- optimize.portfolio.rebalancing(RTRN, portfolio = portf.dn,
-                                             optimize_method = "DEoptim",
-                                             search_size = 50, trace = FALSE,
-                                             rebalance_on = "years",
-                                             rp = rp)
-chart.Weights(opt.dn.reb, main="CRRA Weights", col=bluemono)
-chart.RiskReward(opt.dn, risk.col = "StdDev")
-charts.PerformanceSummary(port.returns)
+VaR(RTRN, p=0.95, method="modified", portfolio_method="component", weights=opt3$weights)
